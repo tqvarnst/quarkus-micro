@@ -13,5 +13,6 @@ FROM scratch AS ubi8-micro
 COPY --from=ubi-micro-build /mnt/rootfs/ /
 COPY --from=ubi-micro-build /etc/yum.repos.d/ubi.repo /etc/yum.repos.d/ubi.repo
 COPY --from=upx /tmp/upx-compressed-application /application
+#COPY target/*-runner /application
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

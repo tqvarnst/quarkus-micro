@@ -7,12 +7,11 @@ RUN rm -rf /mnt/rootfs/var/lib/rpm
 
 FROM gruebel/upx:latest AS upx
 COPY target/*-runner /tmp/application
-RUN /usr/bin/upx --best --lzma -o /tmp/upx-compressed-application /tmp/application 
+RUN /usr/bin/upx --best --lzma -o /tmp/quarkus-mandrel-compressed-application /tmp/application 
 
 FROM scratch AS ubi8-micro
 COPY --from=ubi-micro-build /mnt/rootfs/ /
 COPY --from=ubi-micro-build /etc/yum.repos.d/ubi.repo /etc/yum.repos.d/ubi.repo
-COPY --from=upx /tmp/upx-compressed-application /application
-#COPY target/*-runner /application
+COPY --from=upx /tmp/quarkus-mandrel-compressed-application /application
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
